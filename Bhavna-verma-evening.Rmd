@@ -1,0 +1,137 @@
+xxxxx---
+title: "Homework1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+
+```{r}
+library(ggplot2)
+library(magrittr) # needs to be run every time you start R and want to use %>%
+library(dplyr)    # alternatively, this also loads %>%
+
+```
+
+```{r}
+head(diamonds)
+##summarise(diamonds)
+```
+```{r}
+library(dplyr)  
+diamonds %>% 
+  count(price, sort = TRUE) %>% 
+  head()
+
+```
+```{r}
+diamonds2 <- diamonds
+```
+```{r}
+summary(diamonds2)
+```
+```{r}
+##changing the class of column clarity as character.
+diamonds2 <- diamonds2 %>%
+  mutate(as.character(clarity))
+```
+##Question 1- Geom_point Graph indicates price and carat with different color for clarity 
+```{r}
+ggplot(diamonds2,aes(x=carat, y =price , color= as.character(clarity)))+
+  geom_point(alpha = 0.3)+
+  labs(x ="Diamonds Carat",
+       y ="Diamonds Price", subtitle = "Scatterplot of Diamond Prices")+
+  theme_bw()
+```
+
+
+##Question 2 Facet_wrap indicates each group of clarity with price and carat
+```{r}
+levels(diamonds2$clarity) <- c("I1","SI2","SI1","VS1","VS2","VVS2","VVS1","IF")
+ggplot(diamonds2,aes(x=carat,y =price, color= as.character(clarity)))+
+  geom_point(alpha = 0.3,show.legend=FALSE)+
+  labs(x ="Diamonds Carat",
+       y ="Diamonds Price", subtitle = "Scatterplot of Diamond Prices")+
+  facet_wrap(~clarity)+
+  theme_bw()
+
+```
+
+##Question 3- Geom_smooth
+```{r}
+ggplot(diamonds2,aes(x=table, y =price))+
+ geom_smooth(method ='lm',linetype ="dashed", color ="red" )+
+  labs(x ="Table",
+       y ="Diamonds Price", subtitle = "Scatterplot of Diamond Prices")+
+  theme_bw()
+```
+
+```{r}
+ggplot(diamonds2,aes(x=depth, y =price))+
+  geom_smooth(method ='lm',linetype ="dashed", color ="white" )+
+  labs(x ="Depth",
+       y ="Diamonds Price")+
+  theme_bw()
+```
+
+##Question 4- Geom_bar indicates price and count 
+```{r}
+##class_price <- dplyr::count(diamonds2, price)
+##print(class_price)
+```
+```{r}
+ggplot(diamonds2, 
+       aes(x= price))+
+  geom_bar()+
+  theme_bw()
+
+```
+```{r}
+ggplot(diamonds2,aes(x=price))+
+  geom_histogram()+
+  labs(x ="price",
+       y ="count")+
+    theme_bw()
+```
+```{r}
+ggplot(diamonds2,aes(x=clarity, fill =clarity))+
+  geom_bar(show.legend=FALSE)+
+  labs(x ="clarity",
+       y ="count")+
+    theme_bw()
+```
+
+```{r}
+ggplot(diamonds2,aes(cut, depth))+
+  geom_violin(colour = "#3366FF")+
+  geom_jitter(alpha = 0.05, color ="red")+
+  labs(x ="cut",
+       y ="depth")+
+  theme_bw()
+```
+
+```{r}
+summary(diamonds2)
+```
+
+```{r}
+class(diamonds2$x)
+class(diamonds2$price)
+
+ggplot(diamonds2,aes(x, price))+  
+  geom_smooth(method = "auto",
+              se = FALSE )+
+  geom_smooth(method = "lm",
+              se = TRUE, color ="green")+
+  theme_bw()
+```
+
